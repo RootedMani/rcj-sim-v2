@@ -64,7 +64,7 @@
 ۲. فایل `worlds/world.wbt` را باز کنید.
 
 <p align="center" style="background-color: #212121">
-    <img src="./docs/pic/world.gif" alt="Webots simulation world" width="80%">
+    <img src="./docs/pic/world.gif" alt="Webots simulation world">
 </p>
 
 </div>
