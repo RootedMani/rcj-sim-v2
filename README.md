@@ -201,7 +201,7 @@ def run_robot(rcj):
 </p>
 
 
-مثال دیگر حرکت ربات به سمت راست:
+حرکت ربات به سمت راست:
 
 <div dir="ltr">
 
@@ -216,6 +216,41 @@ def run_robot(rcj):
 
 <p align="center" style="background-color: #212121">
     <img src="./docs/pic/right.gif" alt="Webots simulation world">
+</p>
+
+
+حرکت ربات به صورت مورب:
+
+<div dir="ltr">
+
+```python
+from utils import *
+def run_robot(rcj):
+    rcj.motor(10, 0, -10, 0)
+
+```
+
+</div>
+
+<p align="center" style="background-color: #212121">
+    <img src="./docs/pic/orib.gif" alt="Webots simulation world">
+</p>
+
+چرخش ربات به دور خود:
+
+<div dir="ltr">
+
+```python
+from utils import *
+def run_robot(rcj):
+    rcj.motor(5, 5, 5, 5)
+
+```
+
+</div>
+
+<p align="center" style="background-color: #212121">
+    <img src="./docs/pic/turn.gif" alt="Webots simulation world">
 </p>
 
 
