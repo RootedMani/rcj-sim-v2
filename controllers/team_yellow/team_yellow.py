@@ -11,9 +11,9 @@ def main():
     
     while rcj.step():
         if "1" in robot_name:
-            robot1.run_robot(rcj)
+            robot1.loop(rcj)
         elif "2" in robot_name:
-            robot2.run_robot(rcj)
+            robot2.loop(rcj)
 
 if __name__ == "__main__":
     main()

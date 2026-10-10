@@ -90,7 +90,7 @@
 ```python
 from utils import *
 
-def run_robot(rcj):
+def loop(rcj):
     ball_pos = rcj.get_ball_position()
     robot_heading = rcj.get_heading()
     robot_pos = rcj.get_position()
@@ -112,14 +112,14 @@ def run_robot(rcj):
 <br>
 <br>
 
-1. تابع `run_robot`: 
+1. تابع `loop`: 
 
 این تابع هنگام پس از شروع بازی در یک حلقه بینهایت فراخوانی می‌شود و الگوریتم بازی ربات را اجرا می‌کند.
 
 <div dir="ltr">
 
 ```python
-def run_robot(rcj):
+def loop(rcj):
 ```
 
 </div>
@@ -188,7 +188,7 @@ ball_in_kicker = rcj.is_ball_touched()
 
 ```python
 from utils import *
-def run_robot(rcj):
+def loop(rcj):
     rcj.motor(20, 20, -20, -20)
 ```
 
@@ -207,7 +207,7 @@ def run_robot(rcj):
 
 ```python
 from utils import *
-def run_robot(rcj):
+def loop(rcj):
     rcj.motor(10, -10, -10, 10)
 
 ```
@@ -225,7 +225,7 @@ def run_robot(rcj):
 
 ```python
 from utils import *
-def run_robot(rcj):
+def loop(rcj):
     rcj.motor(10, 0, -10, 0)
 
 ```
@@ -242,7 +242,7 @@ def run_robot(rcj):
 
 ```python
 from utils import *
-def run_robot(rcj):
+def loop(rcj):
     rcj.motor(5, 5, 5, 5)
 
 ```
