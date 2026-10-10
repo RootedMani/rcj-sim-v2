@@ -63,15 +63,7 @@
 
 ۲. فایل `worlds/world.wbt` را باز کنید.
 
-<p align="center">
-  <video src="https://raw.githubusercontent.com/fdmxfarhan/rcj-sim-v2/main/docs/pic/world.mp4"
-         autoplay
-         loop
-         muted
-         playsinline
-         width="100%">
-  </video>
-</p>
+<img src="./docs/pic/world.gif" alt="Webots simulation world" width="100%">
 
 
 </div>
