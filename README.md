@@ -64,7 +64,7 @@
 ۲. فایل `worlds/world.wbt` را باز کنید.
 
 <p align="center">
-  <video src="docs/pic/world.mp4"
+  <video src="https://raw.githubusercontent.com/fdmxfarhan/rcj-sim-v2/main/docs/pic/world.mp4"
          autoplay
          loop
          muted
