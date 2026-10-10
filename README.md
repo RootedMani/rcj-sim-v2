@@ -136,7 +136,7 @@ ball_pos = rcj.get_ball_position()
 
 </div>
 
-محورهای مختصات زمین به صورت زیر می‌باشد:
+محورهای مختصات زمین به صورت زیر می‌باشد مرکز زمین مبداء مختصات است:
 
 ![Webots simulation world](docs/pic/axis.png)
 
@@ -175,5 +175,48 @@ ball_in_kicker = rcj.is_ball_touched()
 ```
 
 </div>
+
+## سیستم حرکتی جند حهته
+
+سیستم حرکتی ربات‌های فوتبالیست یک سیستم حرکتی omnidirectional یا چند جهته است. سیستم حرکتی چند جهته به ربات اجازه می‌دهد تا در تمام جهات بتواند حرکت کند. بدین منظور در ربات‌ها از چهار چرخ خورشیدی استفاده شده که می‌توان با استفاده از تابع `rcj.motor(ML1, ML2, MR2, MR1)` سرعت هر موتور را کنترل کرد.
+
+![omni-drive](docs/pic/omni.jpg)
+
+به عنوان مثال برای حرکت ربات به سمت جلو، میتوان از دستور زیر استفاده کرد:
+
+<div dir="ltr">
+
+```python
+from utils import *
+def run_robot(rcj):
+    rcj.motor(20, 20, -20, -20)
+```
+
+</div>
+
+> توجه داشته باشید که حداکثر سرعت هر موتور `20` می‌باشد.
+
+<p align="center" style="background-color: #212121">
+    <img src="./docs/pic/forward.gif" alt="Webots simulation world">
+</p>
+
+
+مثال دیگر حرکت ربات به سمت راست:
+
+<div dir="ltr">
+
+```python
+from utils import *
+def run_robot(rcj):
+    rcj.motor(10, -10, -10, 10)
+
+```
+
+</div>
+
+<p align="center" style="background-color: #212121">
+    <img src="./docs/pic/right.gif" alt="Webots simulation world">
+</p>
+
 
 </div>
