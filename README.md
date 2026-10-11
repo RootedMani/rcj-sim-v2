@@ -1,3 +1,17 @@
+<p align="right" dir="rtl">
+  برای مشاهده <a href="README-fa.md">نسخه ترجمه شده به فارسی</a> کلیک کنید.
+</p>
+
+
+<p align="right">
+  <a href="README-fa.md">
+    <img src="https://img.shields.io/badge/🇮🇷%20Read%20in%20Persian-238636?style=for-the-badge&labelColor=238636" alt="Read in Persian">
+  </a>
+</p>
+
+---
+<br>
+
 # Advanced Soccer Robot Simulator
 
 A soccer simulation featuring four robots, built with Webots. This project includes a custom field and ball, two teams (blue and yellow), Python-based robot controllers, and a game supervisor for tracking scores and managing gameplay.
