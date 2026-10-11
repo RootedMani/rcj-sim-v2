@@ -9,7 +9,7 @@ def loop(rcj):
     if ball_in_kicker:
         rcj.kick()
     if ball_pos:
-        ball_angle = getAngle(rcj, ball_pos)
-        moveAngle(rcj, ball_angle, 10, robot_heading)
+        ball_angle = angleBetween(rcj, ball_pos, robot_pos)
+        moveAngle(rcj, ball_angle, 5, robot_heading)
     else:
         rcj.motor(0, 0, 0, 0)
