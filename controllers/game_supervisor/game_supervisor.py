@@ -96,29 +96,18 @@ def respawn_ball(position):
         0.0, 0.0, 0.0   # Angular velocity: X, Y, Z
     ])
 
-# ---- راه‌اندازی سوپروایزر ----
+
 robot = Supervisor()
-# توپ
+
 ball_node = robot.getFromDef("BALL")
 if ball_node is None:
     raise RuntimeError("Ball node with DEF 'BALL' not found.")
 ball_translation = ball_node.getField("translation")
 last_position = ball_translation.getSFVec3f()
 stuck_time = 0.0
-# ربات‌ها (Y1, Y2, B1, B2)
-# مطمئن شوید در درخت صحنه (Scene Tree) فیلد DEF ربات‌ها دقیقاً یکی از این نام‌ها باشد
+
 robot_defs = ["Y1", "Y2", "B1", "B2"]
 robots_data = {}
-
-# ---- Wall penalty state ----
-# Example:
-# {
-#   "Y1": {
-#       "active": True,
-#       "until": 123.45,
-#       "penalty_position": [...]
-#   }
-# }
 wall_penalties = {}
 for r_def in robot_defs:
     wall_penalties[r_def] = {
@@ -136,10 +125,10 @@ for r_def in robot_defs:
         }
     else:
         print(f"[Warning] Robot with DEF '{r_def}' not found in WorldInfo/Scene Tree.")
-# متغیرهای امتیاز و وضعیت
+
 score_yellow = 0
 score_blue = 0
-goal_cooldown = 0  # فریم‌های مکث پس از گل
+goal_cooldown = 0
 
 
 def get_wall_touch(robot_pos):
@@ -166,8 +155,6 @@ def get_wall_touch(robot_pos):
     if y >= 0.8:
         return "top"
     return None
-
-
 def check_ball_below_field(position):
     """
     Check whether the ball has fallen below the field.
@@ -177,8 +164,6 @@ def check_ball_below_field(position):
     if z < -BALL_SAFE_Z:
         return True, [x, y, BALL_SAFE_Z]
     return False, position
-
-
 def get_penalty_position(robot_pos):
     """
     Put the robot outside the field according to
@@ -189,8 +174,6 @@ def get_penalty_position(robot_pos):
         # Fallback position
         return PENALTY_POSITIONS["right"][:]
     return PENALTY_POSITIONS[wall][:]
-
-
 def start_wall_penalty(robot_name):
     """
     Send a robot behind its own team's goal and start
@@ -234,8 +217,6 @@ def start_wall_penalty(robot_name):
     #     f"sent behind goal for "
     #     f"{WALL_PENALTY_TIME:.0f} seconds."
     # )
-
-
 def maintain_wall_penalty(robot_name):
     """
     Keep a penalized robot at its designated position
@@ -251,8 +232,6 @@ def maintain_wall_penalty(robot_name):
         penalty["penalty_position"]
     )
     r_info["node"].resetPhysics()
-
-
 def find_farthest_neutral_position(ball_position, returning_robot_name):
     """
     Find the farthest neutral position from the ball that
@@ -324,8 +303,6 @@ def find_farthest_neutral_position(ball_position, returning_robot_name):
     #     f"{returning_robot_name}!"
     # )
     return None
-
-
 def release_wall_penalty(robot_name, ball_position):
     """
     Release a robot after its 60-second penalty.
@@ -363,8 +340,6 @@ def release_wall_penalty(robot_name, ball_position):
     #     f"[WALL PENALTY END] {robot_name} returned "
     #     f"to {target_position[:2]}"
     # )
-
-
 def update_wall_penalties(ball_position):
     """
     Update all wall penalties.
@@ -396,14 +371,10 @@ def update_wall_penalties(ball_position):
         wall = get_wall_touch(robot_position)
         if wall is not None:
             start_wall_penalty(robot_name)
-
-
 def distance2d(a, b):
     return math.hypot(a[0] - b[0], a[1] - b[1])
 
-
 NEUTRAL_OCCUPANCY_DISTANCE = 0.2
-
 def nearest_point(position, points):
     """
     Find the nearest unoccupied respawn point.

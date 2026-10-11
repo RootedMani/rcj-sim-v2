@@ -8,6 +8,8 @@ EXTERNPROTO "../protos/Robot_B1.proto"
 EXTERNPROTO "../protos/Robot_B2.proto"
 
 WorldInfo {
+  FPS 30
+  optimalThreadCount 8
   basicTimeStep 8
   physicsDisableTime 0
   contactProperties [
