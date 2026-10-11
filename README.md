@@ -120,7 +120,7 @@ def loop(rcj):
 
 </div>
 
-In this program, all functions defined in `utils.py` are imported into Robot 1's controller. The following sections explain the commands and sensors used in this program.
+> In this program, all functions defined in `utils.py` are imported into Robot 1's controller. The following sections explain the commands and sensors used in this program.
 
 <br>
 
