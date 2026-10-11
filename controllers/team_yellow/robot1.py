@@ -8,25 +8,17 @@ def loop(rcj):
     ball_in_kicker = rcj.is_ball_touched()
 
     if ball_in_kicker:
-        ball_angle = angleBetween(rcj, [1.1, 0], robot_pos)
-        if abs(ball_angle) < 4:
+        target_angle = angleBetween(rcj, [1.1, 0], robot_pos)
+        if abs(target_angle) < 4:
             rcj.set_dribbler(False)
             rcj.kick()
         else:
             rcj.set_dribbler(True)
-            moveXY(rcj, 0, 0, -ball_angle/2)
+            moveXY(rcj, 0, 0, -max(-10, min(10, target_angle)))
     elif ball_pos:
-        ball_angle = angleBetween(rcj, ball_pos, robot_pos)
+        ball_angle = getAngle(rcj, ball_pos)
         shift = max(-60, min(ball_angle * 1.5, 60))
-        if ball_pos[1] > 0.8:
-            moveTo(rcj, max(-1, min(ball_pos[0], 1)), 0.4, 0)
-        elif ball_pos[1] < -0.8:
-            moveTo(rcj, max(-1, min(ball_pos[0], 1)), -0.4, 0)
-        elif ball_pos[0] > 1.06:
-            moveTo(rcj, 0.8, max(-0.8, min(ball_pos[1], 0.8)), 0)
-        elif ball_pos[0] < -1.06:
-            moveTo(rcj, -0.8, max(-0.8, min(ball_pos[1], 0.8)), 0)
-        else:
-            moveAngle(rcj, ball_angle + shift, 20, robot_heading)
+        # moveAngle(rcj, ball_angle + shift, 20, robot_heading)
+        moveXY(rcj, -ball_pos[0]*200, ball_pos[1]*200 , -ball_angle)
     else:
-        rcj.motor(0, 0, 0, 0)
+        moveTo(rcj, -0.5, 0, 0)
