@@ -404,23 +404,13 @@ def distance2d(a, b):
 
 NEUTRAL_OCCUPANCY_DISTANCE = 0.2
 
-
 def nearest_point(position, points):
     """
-    Find the nearest unoccupied point to the given position.
+    Find the nearest unoccupied respawn point.
 
-    A point is considered occupied if another active robot
-    is within NEUTRAL_OCCUPANCY_DISTANCE meters of it.
-
-    Args:
-        position: Reference position, e.g. the ball position.
-        points: Candidate respawn positions.
-
-    Returns:
-        The nearest unoccupied position, or None if all
-        positions are occupied.
+    A point is occupied if any active robot or the ball
+    is within NEUTRAL_OCCUPANCY_DISTANCE of it.
     """
-
     candidates = sorted(
         points,
         key=lambda point: distance2d(point, position)
@@ -429,27 +419,28 @@ def nearest_point(position, points):
     for point in candidates:
         occupied = False
 
-        for robot_name, r_info in robots_data.items():
+        # Check whether the ball occupies this point.
+        if distance2d(point, position) < NEUTRAL_OCCUPANCY_DISTANCE:
+            occupied = True
 
-            # Ignore robots currently serving a penalty.
-            if wall_penalties[robot_name]["active"]:
-                continue
+        # Check whether another active robot occupies this point.
+        if not occupied:
+            for robot_name, r_info in robots_data.items():
+                # Ignore robots currently serving penalties.
+                if wall_penalties[robot_name]["active"]:
+                    continue
 
-            robot_position = (
-                r_info["translation"].getSFVec3f()
-            )
+                robot_position = r_info["translation"].getSFVec3f()
 
-            # Check whether a robot is within 0.2 m.
-            if distance2d(point, robot_position) < NEUTRAL_OCCUPANCY_DISTANCE:
-                occupied = True
-                break
+                if distance2d(point, robot_position) < NEUTRAL_OCCUPANCY_DISTANCE:
+                    occupied = True
+                    break
 
         if not occupied:
             return point[:]
 
-    # No unoccupied point was found.
+    # All points are occupied.
     return None
-
 def check_goal(pos):
     """
     بررسی گل شدن توپ برای دو تیم
@@ -461,8 +452,6 @@ def check_goal(pos):
         elif x < -1.095:
             return "BLUE"    # ورود به دروازه زرد -> گل آبی
     return None
-
-
 def check_out_of_bounds(pos):
     """
     بررسی اوت شدن توپ
@@ -487,8 +476,6 @@ def check_out_of_bounds(pos):
     new_x = max(FIELD_X_MIN + INWARD_MARGIN, min(FIELD_X_MAX - INWARD_MARGIN, new_x))
     new_y = max(FIELD_Y_MIN + INWARD_MARGIN, min(FIELD_Y_MAX - INWARD_MARGIN, new_y))
     return is_out, [new_x, new_y, BALL_Z]
-
-
 def respawn_robots(kickoff_team):
     """
     Reset all 4 robots for kickoff.
@@ -523,8 +510,6 @@ def respawn_robots(kickoff_team):
     #     f"[KICKOFF] All robots returned to field. "
     #     f"{kickoff_team} will kick off."
     # )
-
-
 def update_match_timer():
     """
     Update the 10-minute match countdown.
@@ -568,8 +553,6 @@ def update_match_timer():
         robot.simulationSetMode(
             Supervisor.SIMULATION_MODE_PAUSE
         )
-
-
 def update_scoreboard(status_text="", status_color=0x00FF66):
     # Yellow score - top left
     robot.setLabel(
