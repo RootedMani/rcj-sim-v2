@@ -1,126 +1,277 @@
-# RCJ Soccer Simulation v2
+<p align="right" dir="rtl">
+  برای مشاهده <a href="README-fa.md">نسخه ترجمه شده به فارسی</a> کلیک کنید.
+</p>
 
-A four-robot RoboCup Junior soccer simulation built with **Webots**. The project includes a custom field and ball, two robot teams (blue and yellow), Python robot controllers, and a match supervisor for scoring and match flow.
 
-> The world file uses the Webots **R2025a** format. Use a compatible Webots release to open and run it.
+<p align="right">
+  <a href="README-fa.md">
+    <img src="https://img.shields.io/badge/🇮🇷%20Read%20in%20Persian-238636?style=for-the-badge&labelColor=238636" alt="Read in Persian">
+  </a>
+</p>
+
+---
+<br>
+
+# Advanced Soccer Robot Simulator
+
+A soccer simulation featuring four robots, built with Webots. This project includes a custom field and ball, two teams (blue and yellow), Python-based robot controllers, and a game supervisor for tracking scores and managing gameplay.
+
+> This project uses **Webots R2025a**. Make sure you use a compatible version of Webots to open and run the world.
+
+<br>
+
+![Webots simulation world](docs/pic/world.png)
+
+<br>
 
 ## Features
 
-- Two teams with two robots each: `Y1`, `Y2`, `B1`, and `B2`.
-- Four-wheel omni-drive robot models with GPS, compass, and radio receiver devices.
-- Ball-position broadcasts from the ball controller to the robot controllers.
-- Separate role logic for robot 1 and robot 2 on each team.
-- Match scoreboard and a ten-minute countdown.
-- Goal detection, kickoff repositioning, and a short pause after a goal.
-- Ball recovery when it leaves the playable area, falls below the field, or remains stationary.
-- Wall-touch penalties that temporarily move a robot outside the field.
+- Two teams, yellow and blue, each consisting of two robots.
+- Yellow team robots: `Y1`, `Y2`
+- Blue team robots: `B1`, `B2`
+- Four-wheeled robot models with an omnidirectional drive system.
+- Each robot is equipped with GPS, a compass, and a ball sensor.
+- Wall-contact penalty system that temporarily moves the offending robot outside the field.
 
-## Repository layout
+<br>
+
+## Project Structure
+
+The simulation project has the following file structure:
+
+<div dir="ltr">
 
 ```text
 .
-├── controllers/
-│   ├── ball_controller/       # Broadcasts ball GPS coordinates
-│   ├── game_supervisor/       # Match clock, score, kickoff, and game rules
-│   ├── team_blue/             # Blue team entry point, robot roles, and helpers
-│   └── team_yellow/           # Yellow team entry point, robot roles, and helpers
-├── protos/                    # Four robot PROTO definitions and mesh assets
+├── controllers/             # Robot controllers
+│   ├── ball_controller/     # Ball controller code
+│   ├── game_supervisor/     # Game supervisor code
+│   ├── team_blue/           # Blue team controller code
+│   └── team_yellow/         # Yellow team controller code
+├── protos/
 └── worlds/
-    ├── world.wbt              # Webots world and match setup
-    └── assets/                # Field and ball textures
+    ├── world.wbt            # Webots simulation world
+    └── assets/
 ```
 
-## Requirements
+</div>
 
-- **Webots R2025a** (or a compatible newer release that can load the R2025a world format).
-- A Webots installation with its Python controller runtime available.
-- Internet access the first time the world is opened if Webots needs to retrieve the background PROTOs referenced from the Webots R2025a GitHub release.
+<br>
 
-There is no separate Python dependency or package manifest in this repository. The controllers use Python's standard library and Webots' `controller` API.
+## Required Software
 
-## Run the simulation
+| Software | Description | Download |
+|---|---|---|
+| 🐍 Python | Python programming language. | [Download](https://www.python.org/downloads/) |
+| 🤖 Webots | Robot simulation software. | [Download](https://cyberbotics.com/) |
+| 💻 Visual Studio Code | Code editor. | [Download](https://code.visualstudio.com/download) |
+| 📦 RCJ sim v2 | Webots soccer simulation project. | [Download](https://github.com/fdmxfarhan/rcj-sim-v2/archive/refs/heads/main.zip) |
 
-1. Clone or download this repository.
-2. Open `worlds/world.wbt` in Webots. You can use **File → Open World…** or, from the repository root, launch it with:
+<br>
 
-   ```bash
-   webots worlds/world.wbt
-   ```
+## Running the Simulation
 
-3. Start or reset the simulation in Webots. The world assigns the controllers to the ball, teams, and match supervisor automatically.
+1. After installing the required software and downloading the `rcj-sim-v2` project, extract the downloaded ZIP file.
+2. Open `worlds/world.wbt` in Webots.
 
-If Webots reports that it cannot locate a controller, confirm that the repository's `controllers/` directory is at the project root and that the world is opened from this checkout. If an external PROTO cannot be loaded, check network access and that the Webots release matches the URL version in `worlds/world.wbt`.
+<p align="center" style="background-color: #212121">
+    <img src="./docs/pic/world.gif" alt="Webots simulation world">
+</p>
 
-## How it works
+## Robot Controllers
 
-### World and teams
+Each team has a controller directory (`team_yellow` or `team_blue`) containing five Python files:
 
-`worlds/world.wbt` defines the field, goals, ball, team robots, and a separate supervisor robot. The four team robots are instantiated from `protos/Robot_*.proto`. Their PROTOs name the controllers `team_blue` or `team_yellow`; the team controller dispatches to `robot1.py` or `robot2.py` according to the robot's name.
+- `rcj_robot.py`
+- `team_blue.py`
+- `robot1.py`
+- `robot2.py`
+- `utils.py`
 
-The blue and yellow controller directories have parallel APIs and role files. Their shared `rcj_robot.py` wrapper handles sensing, team-relative coordinates, wheel commands, ball possession, dribbling, and kicking. `utils.py` provides movement and aiming helpers.
+**Important:** Do not modify `rcj_robot.py` or `team_blue.py`. In the simulation competition, only the following files are submitted for evaluation:
 
-### Ball tracking and kicking
+- `robot1.py`
+- `robot2.py`
+- `utils.py`
 
-`controllers/ball_controller/ball_controller.py` reads the ball's GPS position and broadcasts three double-precision values (`x`, `y`, and `z`) through a Webots emitter. Each robot receives the latest packet through its receiver. The `RCJRobot` wrapper exposes the ball position in team-relative coordinates.
+Each robot has its own Python file, either `robot1.py` or `robot2.py`, containing its algorithms and control commands. Commands, functions, and variables shared by both robots on the same team are defined in `utils.py`.
 
-Ball possession is estimated geometrically: the ball must be in front of the robot within the kicker's distance and lateral bounds. The controller wrapper applies the kick force directly to the ball node and prevents repeated kicks while the ball remains in the kicker area. The dribbler is implemented as a controller-side force, not as a separate physical motor.
+For example, consider the controller for Robot 1:
 
-### Match supervisor
+<div dir="ltr">
 
-`controllers/game_supervisor/game_supervisor.py` runs the match logic. The current settings include:
+```python
+from utils import *
 
-- A **10-minute** match clock; the simulation pauses when time expires.
-- Goal detection at either end of the field, within the configured goal-mouth range.
-- Scoreboard updates and a two-second goal pause before play resumes.
-- Ball repositioning after an out-of-bounds event, a fall below the field, or approximately three seconds without meaningful movement.
-- A **30-second** wall-touch penalty, after which a penalized robot returns to an available neutral position.
+def loop(rcj):
+    ball_pos = rcj.get_ball_position()
+    robot_heading = rcj.get_heading()
+    robot_pos = rcj.get_position()
+    ball_in_kicker = rcj.is_ball_touched()
 
-The supervisor uses the scene-tree `DEF` names `BALL`, `Y1`, `Y2`, `B1`, and `B2`. Keep these names in sync if editing the world or supervisor.
-
-## Controller development
-
-### Editing a team strategy
-
-Each team entry point delegates behavior based on the robot's name:
-
-- `robot1.py` implements the first robot's strategy.
-- `robot2.py` implements the second robot's strategy.
-
-To change a strategy, edit the corresponding file in `controllers/team_blue/` or `controllers/team_yellow/`. Keep the `run_robot(rcj)` entry-point signature, or update the team's dispatcher if you intentionally change it.
-
-The shared robot wrapper exposes these commonly used methods:
-
-| Method | Purpose |
-| --- | --- |
-| `get_position()` | Robot position in the team's coordinate frame |
-| `get_heading()` | Robot heading in radians in the team's coordinate frame |
-| `get_ball_position()` | Most recently received ball position, or `None` before the first packet |
-| `is_ball_in_kicker()` / `is_ball_touched()` | Checks whether the ball is within the kicker region |
-| `motor(v1, v2, v3, v4)` | Sets the four wheel speeds (clamped by the wrapper) |
-| `kick()` | Kicks when the ball is within the kicker region |
-| `set_dribbler(state)` | Enables or disables the controller-side dribbler |
-
-`utils.py` also defines `moveXY`, `moveAngle`, `moveTo`, and `angleBetween` for movement and relative-angle calculations.
-
-### Changing the world or match rules
-
-- Edit `worlds/world.wbt` to change field geometry, textures, initial placements, or scene-tree assignments.
-- Edit the robot definitions under `protos/` to change robot geometry, sensors, devices, or default controllers.
-- Edit `controllers/game_supervisor/game_supervisor.py` to change match timing, scoring bounds, kickoff positions, ball recovery, or penalties.
-- Edit `controllers/ball_controller/ball_controller.py` and the robot receiver code together if changing the ball broadcast format.
-
-When changing controller device names, update both the PROTO device definitions and the corresponding Python lookups.
-
-## Checks
-
-The controller files can be checked for Python syntax from the repository root with:
-
-```bash
-python3 -m compileall -q controllers
+    if ball_in_kicker:
+        rcj.kick()
+    if ball_pos:
+        ball_angle = angleBetween(rcj, ball_pos, robot_pos)
+        moveAngle(rcj, ball_angle, 5, robot_heading)
+    else:
+        rcj.motor(0, 0, 0, 0)
 ```
 
-A successful syntax check does not validate the Webots runtime; run the world in Webots to verify simulation behavior and device configuration.
+</div>
 
-## License and attribution
+> In this program, all functions defined in `utils.py` are imported into Robot 1's controller. The following sections explain the commands and sensors used in this program.
 
-No license file is currently included. Until a license is added, reuse and redistribution rights are not explicitly granted. The world also references background PROTOs hosted in the [Cyberbotics Webots repository](https://github.com/cyberbotics/webots) at the R2025a release.
+<br>
+
+### 1. The `loop` Function
+
+The `loop` function is repeatedly called in an infinite loop after the game starts. It executes the robot's gameplay algorithm.
+
+<div dir="ltr">
+
+```python
+def loop(rcj):
+```
+
+</div>
+
+### 2. Retrieving the Ball Position
+
+The following function retrieves the ball's position on the field and stores it in a variable. It returns a two-element array in the format `[x, y]`.
+
+<div dir="ltr">
+
+```python
+ball_pos = rcj.get_ball_position()
+```
+
+</div>
+
+The field's coordinate system is shown below. The center of the field is the origin of the coordinate system.
+
+![Field coordinate axes](docs/pic/axis.png)
+
+### 3. Compass Sensor
+
+The compass sensor provides the robot's heading angle in radians.
+
+<div dir="ltr">
+
+```python
+robot_heading = rcj.get_heading()
+```
+
+</div>
+
+### 4. GPS Sensor
+
+The following function retrieves the robot's position on the field and stores it in a variable. It returns a two-element array in the format `[x, y]`.
+
+<div dir="ltr">
+
+```python
+robot_pos = rcj.get_position()
+```
+
+</div>
+
+### 5. Ball Contact Sensor
+
+This sensor detects whether the ball is inside the robot's front opening. The ball must be in this position for the robot to kick the ball or use its dribbler.
+
+<div dir="ltr">
+
+```python
+ball_in_kicker = rcj.is_ball_touched()
+```
+
+</div>
+
+## Omnidirectional Drive System
+
+The soccer robots use an **omnidirectional drive system**, which allows them to move in any direction without first turning to face that direction.
+
+Each robot uses four omni wheels. The speed of each motor can be controlled using the following function:
+
+`rcj.motor(ML1, ML2, MR2, MR1)`
+
+![Omnidirectional drive system](docs/pic/omni.jpg)
+
+### Moving Forward
+
+To move the robot forward, use the following commands:
+
+<div dir="ltr">
+
+```python
+from utils import *
+
+def loop(rcj):
+    rcj.motor(20, 20, -20, -20)
+```
+
+</div>
+
+> **Note:** The maximum motor speed is `20`.
+
+<p align="center" style="background-color: #212121">
+    <img src="./docs/pic/forward.gif" alt="Robot moving forward">
+</p>
+
+### Moving Right
+
+To move the robot to the right, use the following commands:
+
+<div dir="ltr">
+
+```python
+from utils import *
+
+def loop(rcj):
+    rcj.motor(10, -10, -10, 10)
+```
+
+</div>
+
+<p align="center" style="background-color: #212121">
+    <img src="./docs/pic/right.gif" alt="Robot moving right">
+</p>
+
+### Moving Diagonally
+
+To move the robot diagonally, use the following commands:
+
+<div dir="ltr">
+
+```python
+from utils import *
+
+def loop(rcj):
+    rcj.motor(10, 0, -10, 0)
+```
+
+</div>
+
+<p align="center" style="background-color: #212121">
+    <img src="./docs/pic/orib.gif" alt="Robot moving diagonally">
+</p>
+
+### Rotating in Place
+
+To rotate the robot around its own center, use the following commands:
+
+<div dir="ltr">
+
+```python
+from utils import *
+
+def loop(rcj):
+    rcj.motor(5, 5, 5, 5)
+```
+
+</div>
+
+<p align="center" style="background-color: #212121">
+    <img src="./docs/pic/turn.gif" alt="Robot rotating in place">
+</p>

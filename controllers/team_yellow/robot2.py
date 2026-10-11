@@ -3,7 +3,7 @@ from utils import *
 
 Goaler_x = 0.9
 
-def run_robot(rcj):
+def loop(rcj):
     ball_pos = rcj.get_ball_position()
     robot_heading = rcj.get_heading()
     robot_pos = rcj.get_position()

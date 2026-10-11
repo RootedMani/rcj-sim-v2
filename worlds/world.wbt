@@ -8,6 +8,8 @@ EXTERNPROTO "../protos/Robot_B1.proto"
 EXTERNPROTO "../protos/Robot_B2.proto"
 
 WorldInfo {
+  FPS 30
+  optimalThreadCount 1
   basicTimeStep 8
   physicsDisableTime 0
   contactProperties [
@@ -36,9 +38,10 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.49729283139739083 0.4972934354398672 0.7109142556660265 1.9055702487988058
-  position 0.027895178188237557 -1.4364780279541032 3.9555558018195773
+  orientation -0.4751264134299553 0.4751271641307278 0.7406139812117238 1.8666632055232024
+  position 0.07878929402541117 -1.7174681172038821 3.8098380737344977
   follow "robot"
+  followType "None"
 }
 TexturedBackground {
 }
