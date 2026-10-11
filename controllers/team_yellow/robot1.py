@@ -18,7 +18,7 @@ def loop(rcj):
     elif ball_pos:
         ball_angle = getAngle(rcj, ball_pos)
         shift = max(-60, min(ball_angle * 1.5, 60))
-        # moveAngle(rcj, ball_angle + shift, 20, robot_heading)
-        moveXY(rcj, -ball_pos[0]*200, ball_pos[1]*200 , -ball_angle)
+        moveAngle(rcj, ball_angle + shift, 20, robot_heading)
+        # moveXY(rcj, -ball_pos[0]*200, ball_pos[1]*200 , -ball_angle)
     else:
         moveTo(rcj, -0.5, 0, 0)
