@@ -99,7 +99,7 @@ def loop(rcj):
     if ball_in_kicker:
         rcj.kick()
     if ball_pos:
-        ball_angle = angleBetween(rcj, ball_pos, robot_pos)
+        ball_angle = getAngle(rcj, ball_pos)
         moveAngle(rcj, ball_angle, 5, robot_heading)
     else:
         rcj.motor(0, 0, 0, 0)
@@ -126,7 +126,7 @@ def loop(rcj):
 
 2. دریافت مختصات توپ:
 
-با استفاده از تابع زیر می‌توان مختصات توپ در زمین را در یک متغیر ذخیره کرد. خروجی این تابع یک آرایه دو عضوی به صورت `[x, y]` می‌باشد.
+با استفاده از تابع زیر می‌توان مختصات توپ **نسبت به ربات** را در یک متغیر ذخیره کرد. خروجی این تابع یک آرایه دو عضوی به صورت `[x, y]` (بر حسب متر) می‌باشد که در آن محور `y` رو به جلوی ربات و محور `x` به سمت چپ ربات است. اگر فاصله توپ از ربات بیشتر از ۰.۸ متر باشد یا ربات دیگری جلوی توپ را گرفته باشد، خروجی `None` خواهد بود.
 
 <div dir="ltr">
 
@@ -136,9 +136,15 @@ ball_pos = rcj.get_ball_position()
 
 </div>
 
-محورهای مختصات زمین به صورت زیر می‌باشد مرکز زمین مبداء مختصات است:
+برای به دست آوردن زاویه توپ بر حسب درجه (صفر یعنی روبه‌روی ربات و مقدار مثبت یعنی سمت چپ) از تابع `getAngle` در فایل `utils.py` استفاده کنید:
 
-![Webots simulation world](docs/pic/axis.png)
+<div dir="ltr">
+
+```python
+ball_angle = getAngle(rcj, ball_pos)
+```
+
+</div>
 
 3. سنسور قطب نما:
 
@@ -163,6 +169,10 @@ robot_pos = rcj.get_position()
 ```
 
 </div>
+
+محورهای مختصات زمین به صورت زیر می‌باشد مرکز زمین مبداء مختصات است. مختصات تیم آبی قرینه شده است تا هر دو تیم به سمت +X حمله کنند:
+
+![Webots simulation world](docs/pic/axis.png)
 
 5. سنسور دهانه:
 
